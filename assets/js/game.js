@@ -98,6 +98,19 @@ var startGame = function () {
       enemyHealth = 50;
       // Pass the pickedEnemyName into fight function
       fight(pickedEnemyName);
+
+      // If player is still alive and not at the last enemy, allow shopping
+      if (playerHealth > 0 && i < enemyNames.length - 1) {
+        // Ask player if they want to shop
+        var storeConfirm = window.confirm(
+          'The fight is over, visit the store?'
+        );
+
+        // If yes, go to shop
+        if (storeConfirm) {
+          shop();
+        }
+      }
     } else {
       window.alert('You have lost your robot in battle! G A M E O V E R');
       break;
@@ -129,6 +142,48 @@ var endGame = function () {
     startGame();
   } else {
     window.alert('Thank you for playing Robot Gladiators! Come back soon!');
+  }
+};
+
+// Allow player to shop
+var shop = function () {
+  // Ask player what they want to do
+  var shopOptionPrompt = window
+    .prompt(
+      'Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: REFILL, UPGRADE, or LEAVE to make a choice.'
+    )
+    .toLowerCase();
+
+  // Fulfill player choice
+  switch (shopOptionPrompt) {
+    case 'refill':
+      if (playerMoney >= 7) {
+        window.alert("Refilling player's health by 20 for 7 dollars.");
+        // Increase playerHealth and decrease playerMoney
+        playerHealth += 20;
+        playerMoney -= 7;
+      } else {
+        window.alert("You don't have enough money!");
+      }
+      break;
+    case 'upgrade':
+      if (playerMoney >= 7) {
+        window.alert("Upgrading player's attack by 6 for 7 dollars.");
+        // Increase playerAttack and decrease playerMoney
+        playerAttack += 6;
+        playerMoney -= 7;
+      } else {
+        window.alert("You don't have enough money!");
+      }
+      break;
+    case 'leave':
+      window.alert('Leaving the store.');
+      break;
+    default:
+      window.alert('You did not pick a valid option. Try again.');
+      // Call shop again to allow player to pick a valid option
+      shop();
+      break;
   }
 };
 
