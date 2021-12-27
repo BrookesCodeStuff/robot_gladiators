@@ -7,6 +7,12 @@ var enemyNames = ['Roborto', 'Amy Android', 'Robo Trumble'];
 var enemyHealth = 50;
 var enemyAttack = 12;
 
+// Function to generate a random numeric value
+var randomNumber = function (min, max) {
+  var value = Math.floor(Math.random() * (max - min + 1)) + min;
+  return value;
+};
+
 var fight = function (enemyName) {
   // Repeat and execute as long as the enemy lives
   while (playerHealth > 0 && enemyHealth > 0) {
@@ -22,15 +28,17 @@ var fight = function (enemyName) {
       if (confirmSkip) {
         window.alert(playerName + ' has decided to skip this fight. Goodbye.');
         // Subtract money from playerMoney for skipping
-        playerMoney -= 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log('Player Money: ' + playerMoney);
         // Leave while loop since battle skipped
         break;
       }
     }
 
-    // Remove enemy's health by subtracting the amount set in the playerAttack variable
-    enemyHealth -= playerAttack;
+    // Generate random damage value based on player's attack power
+    var damage = randomNumber(playerAttack - 3, playerAttack);
+    // Deduct damage from enemy's health pool
+    enemyHealth = Math.max(0, enemyHealth - damage);
     console.log(
       playerName +
         ' attacked ' +
@@ -55,8 +63,10 @@ var fight = function (enemyName) {
       window.alert(enemyName + ' still has ' + enemyHealth + ' health left.');
     }
 
-    // Remove player's health by subtracting the amount set in the enemyAttack variable
-    playerHealth -= enemyAttack;
+    // Generate random damage value based on enemy's attack power
+    var damage = randomNumber(enemyAttack - 3, enemyAttack);
+    // Deduct damage from player health pool
+    playerHealth = Math.max(0, playerHealth - damage);
     console.log(
       enemyName +
         ' attacked ' +
@@ -95,7 +105,7 @@ var startGame = function () {
       // Call fight function with enemy
       var pickedEnemyName = enemyNames[i];
       // Reset enemy health before starting a new fight
-      enemyHealth = 50;
+      enemyHealth = randomNumber(40, 60);
       // Pass the pickedEnemyName into fight function
       fight(pickedEnemyName);
 
