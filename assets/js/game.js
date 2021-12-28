@@ -6,14 +6,14 @@ var randomNumber = function (min, max) {
 
 // Function to set a valid player name
 var getPlayerName = function () {
-  var name = "";
+  var name = '';
 
   while (!name) {
-    name = window.prompt("What is your robot's name?")
+    name = window.prompt("What is your robot's name?");
   }
   console.log("Your robot's name is " + name);
   return name;
-}
+};
 
 // Game info and variables
 var playerInfo = {
@@ -50,14 +50,16 @@ var enemyInfo = [
   { name: 'Robo Trumble', attack: (10, 14) },
 ];
 
-var fight = function (enemy) {
-  // Repeat and execute as long as the enemy lives
-  while (playerInfo.health > 0 && enemy.health > 0) {
-    var promptFight = window.prompt(
-      "Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose."
-    );
-    // If player chooses to skip
-    if (promptFight === 'skip' || promptFight === 'SKIP') {
+var fightOrSkip = function () {
+  // Ask player if they'd like to fight or skip
+  var promptFight = prompt('Would you like to FIGHT or SKIP this round?');
+
+  if (!promptFight) {
+    return fightOrSkip();
+  }
+
+  switch (promptFight.toLowerCase()) {
+    case 'skip':
       // Confirm player wants to skip
       var confirmSkip = window.confirm("Are you sure you'd like to quit?");
 
@@ -69,11 +71,22 @@ var fight = function (enemy) {
         // Subtract money from playerInfo.money for skipping
         playerInfo.money = Math.max(0, playerInfo.money - 10);
         console.log('Player Money: ' + playerInfo.money);
-        // Leave while loop since battle skipped
-        break;
+        return true;
       }
-    }
+    case 'fight':
+      return;
+    default:
+      alert('You need to provide a valid answer. Please try again.');
+      return fightOrSkip();
+  }
+};
 
+var fight = function (enemy) {
+  // Repeat and execute as long as the enemy lives
+  while (playerInfo.health > 0 && enemy.health > 0) {
+    if (fightOrSkip()) {
+      break;
+    }
     // Generate random damage value based on player's attack power
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
     // Deduct damage from enemy's health pool
