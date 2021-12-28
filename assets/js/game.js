@@ -22,7 +22,7 @@ var playerInfo = {
   attack: 10,
   money: 10,
   reset: function () {
-    this.health = 100;
+    this.health = 10000;
     this.money = 10;
     this.attack = 10;
   },
@@ -193,13 +193,31 @@ var startGame = function () {
 
 // Function to end the game
 var endGame = function () {
+  var highScore = localStorage.getItem('highscore')
+    ? localStorage.getItem('highscore')
+    : 0;
+  var score = playerInfo.money;
+
   // If player is alive, player wins!
   if (playerInfo.health > 0) {
-    window.alert(
-      'Great job, you survived the game! You now have a score of ' +
-        playerInfo.money +
-        '.'
-    );
+    if (score > highScore) {
+      alert(
+        'Great job, you survived! Your score of ' +
+          score +
+          ' has beaten the previous high score of ' +
+          highScore +
+          '! Congratulations!'
+      );
+      localStorage.setItem('highscore', score);
+    } else {
+      alert(
+        'Great job, you survived! Unfortunately, your score of ' +
+          score +
+          ' has not beaten the previous high score of ' +
+          highScore +
+          '.'
+      );
+    }
   } else {
     window.alert("You've lost your robot in battle.");
   }
